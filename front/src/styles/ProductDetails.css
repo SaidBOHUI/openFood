@@ -1,0 +1,100 @@
+.alternative-products-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.alternative-products-list {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.alternative-products-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.alternative-item {
+    border-bottom: 1px solid #ddd;
+}
+
+.alternative-item:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.alternative-link {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.alternative-link:hover {
+    background-color: #f0f0f0;
+}
+
+.alternative-name, .alternative-brand, .alternative-grade {
+    flex: 1;
+    padding: 0 10px;
+}
+
+.alternative-grade {
+    text-align: center;
+}
+
+.grade {
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.grade-a {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.grade-b {
+    background-color: #8BC34A;
+    color: white;
+}
+
+.grade-c {
+    background-color: #CDDC39;
+    color: white;
+}
+
+.grade-d {
+    background-color: #FFC107;
+    color: white;
+}
+
+.grade-e {
+    background-color: #F44336;
+    color: white;
+}
+
+.grade-unknown {
+    background-color: #9E9E9E;
+    color: white;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}

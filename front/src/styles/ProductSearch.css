@@ -137,3 +137,11 @@ h1 {
     background-color: #9E9E9E;
     color: white;
 }
+
+/* Ensure the link style doesn't interfere with layout */
+.product-link {
+    display: flex;
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+}

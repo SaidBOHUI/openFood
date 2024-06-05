@@ -1,11 +1,11 @@
-const router = require("express").Router();
-const productCtrl = require("../controllers/productController");
-const auth = require("../middlewares/auth.middleware");
+const router = require('express').Router();
+const productCtrl = require('../controllers/productController');
 
-router.get("/barcode/:barcode", productCtrl.getProductByBarcode);
-router.get("/category/:category", productCtrl.searchProductsByCategory);
+router.get('/barcode/:barcode', productCtrl.getProductByBarcode);
+router.get('/category/:category', productCtrl.searchProductsByCategory);
+router.get('/alternatives/:barcode', productCtrl.getAlternativeProducts);
+router.post('/saveSubstitute', productCtrl.saveSubstitute);
 router.get("/", productCtrl.getProductTest);
-router.get("/alternatives", productCtrl.getAlternativeProducts);
 router.get("/categories", productCtrl.getCategories);
 router.get("/allergens", productCtrl.getAllergens);
 

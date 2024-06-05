@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   getProductByBarcode,
   searchProductsByCategory,
@@ -78,8 +78,8 @@ const ListCategory = () => {
               <div className="product-grade">Note</div>
             </li>
             {products.map((product) => (
-              <Link to={`/produits/${product.code}`}>
-                <li key={product.code} className="product-item">
+              <li key={product.code} className="product-item">
+                <Link to={`/produits/${product.code}`} className="product-link">
                   <div className="product-name">
                     {product.product_name || "Non spécifié"}
                   </div>
@@ -91,8 +91,8 @@ const ListCategory = () => {
                       {product.nutrition_grades.toUpperCase()}
                     </span>
                   </div>
-                </li>
-              </Link>
+                </Link>
+              </li>
             ))}
           </ul>
         </div>
@@ -100,4 +100,5 @@ const ListCategory = () => {
     </div>
   );
 };
+
 export default ListCategory;

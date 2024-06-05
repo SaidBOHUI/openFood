@@ -7,6 +7,8 @@ import * as React from "react";
 import Details from "../pages/Details";
 import LoginPage from "../pages/LoginPage";
 import SignupPage from "../pages/SignupPage";
+import AlternativesPage from "../pages/AlternativesPage";
+
 
 const MainRoutes = () => {
   const [user, setUser] = useState(useAuth());
@@ -14,6 +16,7 @@ const MainRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/produit/alternate/:id" element={<AlternativesPage />} />
       <Route path="/produits/:id" element={<Details />} />
       {/*<Route path="/produits/:id">
         <Route index caseSensitive element={<ListProduits />} />
