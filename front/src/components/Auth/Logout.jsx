@@ -1,16 +1,18 @@
-// src/components/Auth/Logout.jsx
-
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { logout } from '../../services/authService';
 
 const Logout = () => {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const handleLogout = async () => {
-        await logout();
-        localStorage.removeItem('token');
-        history.push('/login');
+        try {
+            await logout();
+            localStorage.removeItem('token');
+            navigate('/login');
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
     };
 
     return (
