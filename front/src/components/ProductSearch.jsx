@@ -68,10 +68,15 @@ const ProductSearch = () => {
                 <div className="products-list">
                     <h2>Produits</h2>
                     <ul>
+                        <li className="product-item header">
+                            <div className="product-name">Nom du produit</div>
+                            <div className="product-brand">Marque</div>
+                            <div className="product-grade">Note</div>
+                        </li>
                         {products.map((product) => (
                             <li key={product.code} className="product-item">
-                                <div className="product-name">{product.product_name}</div>
-                                <div className="product-brand">{product.brands}</div>
+                                <div className="product-name">{product.product_name || 'Non spécifié'}</div>
+                                <div className="product-brand">{product.brands || 'Non spécifié'}</div>
                                 <div className="product-grade">
                                     <span className={`grade grade-${product.nutrition_grades}`}>
                                         {product.nutrition_grades.toUpperCase()}
