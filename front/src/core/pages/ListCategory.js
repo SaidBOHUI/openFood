@@ -7,28 +7,36 @@ const ListCategory = () => {
   //Liste de tous les produits
   const [productList, setProductList] = useState([]);
   const [filter, setFilter] = useState("");
-  const [listCat, setListCat] = useState(["One", "Two", "Three"]);
+  const [listCat, setListCat] = useState([]);
 
   //Etat de chargement, pour être sur que l'appel à l'API se fait avant l'affichage du tableau
   const [load, setLoad] = useState(true);
 
   useEffect(() => {
+    axios
+      .get("/product/categories")
+      .then((res) => {
+        console.log(res);
+        setListCat(res.data.categories);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+  }, []);
+
+  useEffect(() => {
     if (filter != "") {
-      if (filter != "One" && filter != "Two" && filter != "Three") {
-        setLoad(true);
-        //Appel à l'API pour avoir la liste des produits
-        axios
-          .get("/product/alternatives")
-          .then((resp) => {
-            setProductList(resp.data);
-            setLoad(false);
-          })
-          .catch((er) => {
-            alert(er.message);
-          });
-      } else {
-        console.log(filter);
-      }
+      setLoad(true);
+      //Appel à l'API pour avoir la liste des produits
+      axios
+        .get("/product/alternatives", { categories: "confits-d-echalotes" })
+        .then((resp) => {
+          setProductList(resp.data);
+          setLoad(false);
+        })
+        .catch((er) => {
+          alert(er.message);
+        });
     }
   }, [filter]);
 
@@ -41,8 +49,10 @@ const ListCategory = () => {
             id="dropdown-basic-button"
             title={filter != "" ? filter : "Categories"}>
             {listCat.map((item) => (
-              <Dropdown.Item key={item} onClick={() => setFilter(item)}>
-                {item}
+              <Dropdown.Item
+                key={item?.id}
+                onClick={() => setFilter(item?.name)}>
+                {item.name}
               </Dropdown.Item>
             ))}
           </DropdownButton>

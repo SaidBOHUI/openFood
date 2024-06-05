@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import { useState } from "react";
 import { useAuth } from "../context/authProvider";
 import * as React from "react";
+import Details from "../pages/Details";
 
 const MainRoutes = () => {
   const [user, setUser] = useState(useAuth());
@@ -11,7 +12,8 @@ const MainRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      {/*<Route path="/produits">
+      <Route path="/produits/:id" element={<Details />} />
+      {/*<Route path="/produits/:id">
         <Route index caseSensitive element={<ListProduits />} />
         <Route path="theme/:theme" element={<ThemeProduit />} />
         {user !== undefined && user !== null && user.role === "admin" ? (
