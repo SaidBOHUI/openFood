@@ -1,15 +1,15 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = 'http://localhost:4000/user';
+const API_URL = "/user";
 
 export const register = (userData) => {
-    return axios.post(`${API_URL}/register`, userData, { withCredentials: true });
+  return axios.post(`${API_URL}/register`, userData, { withCredentials: true });
 };
 
 export const login = (userData) => {
-    return axios.post(`${API_URL}/login`, userData, { withCredentials: true });
+  return axios.post(`${API_URL}/login`, userData, { withCredentials: true });
 };
 
 export const logout = () => {
-    return axios.post(`${API_URL}/logout`, {}, { withCredentials: true });
+  return axios.post(`${API_URL}/logout`, {}, { withCredentials: true });
 };

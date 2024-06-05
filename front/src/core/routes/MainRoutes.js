@@ -5,6 +5,8 @@ import { useState } from "react";
 import { useAuth } from "../context/authProvider";
 import * as React from "react";
 import Details from "../pages/Details";
+import LoginPage from "../pages/LoginPage";
+import SignupPage from "../pages/SignupPage";
 
 const MainRoutes = () => {
   const [user, setUser] = useState(useAuth());
@@ -26,10 +28,11 @@ const MainRoutes = () => {
         )}
       </Route>
       <Route path="/panier" element={<Panier />} />
-      <Route path="/authentication" element={<Login />}></Route>
-      <Route path="/inscription" element={<Register />}></Route>
-      <Route path="404" element={<NotFound />} />
-    <Route path="*" element={<Navigate to="404" replace />} />*/}
+      */}
+      <Route path="/authentication" element={<LoginPage />}></Route>
+      <Route path="/inscription" element={<SignupPage />}></Route>
+      {/*<Route path="404" element={<NotFound />} />
+      <Route path="*" element={<Navigate to="404" replace />} />*/}
     </Routes>
   );
 };

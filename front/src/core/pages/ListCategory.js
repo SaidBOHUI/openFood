@@ -1,90 +1,100 @@
 import { useEffect, useState } from "react";
-import { Table } from "react-bootstrap";
-import axios from "axios";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
+import {
+  getProductByBarcode,
+  searchProductsByCategory,
+} from "../../services/productService";
+import "../../styles/ProductSearch.css";
+
 const ListCategory = () => {
-  //Liste de tous les produits
-  const [productList, setProductList] = useState([]);
-  const [filter, setFilter] = useState("");
-  const [listCat, setListCat] = useState([]);
+  const [barcode, setBarcode] = useState("");
+  const [category, setCategory] = useState("");
+  const [products, setProducts] = useState([]);
+  const [error, setError] = useState("");
 
-  //Etat de chargement, pour être sur que l'appel à l'API se fait avant l'affichage du tableau
-  const [load, setLoad] = useState(true);
-
-  useEffect(() => {
-    axios
-      .get("/product/categories")
-      .then((res) => {
-        console.log(res);
-        setListCat(res.data.categories);
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
-  }, []);
-
-  useEffect(() => {
-    if (filter != "") {
-      setLoad(true);
-      //Appel à l'API pour avoir la liste des produits
-      axios
-        .get("/product/alternatives", { categories: "confits-d-echalotes" })
-        .then((resp) => {
-          setProductList(resp.data);
-          setLoad(false);
-        })
-        .catch((er) => {
-          alert(er.message);
-        });
+  const handleBarcodeSearch = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      const response = await getProductByBarcode(barcode);
+      setProducts([response.data]);
+    } catch (error) {
+      setError("Produit non trouvé.");
     }
-  }, [filter]);
+  };
+
+  const handleCategorySearch = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      const response = await searchProductsByCategory(category);
+      setProducts(response.data);
+    } catch (error) {
+      setError("Aucun produit trouvé pour cette catégorie.");
+    }
+  };
 
   return (
-    <>
-      <div></div>
-      <div>
-        {load ? (
-          <DropdownButton
-            id="dropdown-basic-button"
-            title={filter != "" ? filter : "Categories"}>
-            {listCat.map((item) => (
-              <Dropdown.Item
-                key={item?.id}
-                onClick={() => setFilter(item?.name)}>
-                {item.name}
-              </Dropdown.Item>
-            ))}
-          </DropdownButton>
-        ) : (
-          <Table>
-            <thead>
-              <tr>
-                <th>Equipement</th>
-                <th>Image</th>
-                <th>Stock disponible</th>
-                <th>Prix par jour</th>
-                <th>Supprimer</th>
-              </tr>
-            </thead>
-            <tbody>
-              {productList?.map((produit) => (
-                <tr key={produit.id}>
-                  <td>{produit.nom}</td>
-                  <td style={{ width: "10rem" }}>
-                    <img
-                      style={{ width: "10rem" }}
-                      src={`/images/${produit.image}`}></img>
-                  </td>
-                  <td>{produit.stock_disponible}</td>
-                  <td>{produit.prix_jour}€</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
+    <div className="product-search-container">
+      <h1>Recherche de produits</h1>
+
+      <div className="search-section">
+        <h2>Recherche par code-barres</h2>
+        <form onSubmit={handleBarcodeSearch} className="search-form">
+          <input
+            type="text"
+            placeholder="Entrer le code-barres"
+            value={barcode}
+            onChange={(e) => setBarcode(e.target.value)}
+            required
+          />
+          <button type="submit">Rechercher</button>
+        </form>
       </div>
-    </>
+
+      <div className="search-section">
+        <h2>Recherche par catégorie</h2>
+        <form onSubmit={handleCategorySearch} className="search-form">
+          <input
+            type="text"
+            placeholder="Entrer la catégorie"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            required
+          />
+          <button type="submit">Rechercher</button>
+        </form>
+      </div>
+
+      {error && <p className="error-message">{error}</p>}
+
+      {products.length > 0 && (
+        <div className="products-list">
+          <h2>Produits</h2>
+          <ul>
+            <li className="product-item header">
+              <div className="product-name">Nom du produit</div>
+              <div className="product-brand">Marque</div>
+              <div className="product-grade">Note</div>
+            </li>
+            {products.map((product) => (
+              <li key={product.code} className="product-item">
+                <div className="product-name">
+                  {product.product_name || "Non spécifié"}
+                </div>
+                <div className="product-brand">
+                  {product.brands || "Non spécifié"}
+                </div>
+                <div className="product-grade">
+                  <span className={`grade grade-${product.nutrition_grades}`}>
+                    {product.nutrition_grades.toUpperCase()}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
   );
 };
 export default ListCategory;
