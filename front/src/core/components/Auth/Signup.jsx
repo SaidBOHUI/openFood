@@ -20,10 +20,10 @@ const Signup = () => {
             navigate('/authentication');
         } catch (error) {
             console.error('Signup error:', error.response.data.msg);
-            if (err.response) {
+            if (error.response) {
                 // Server responded with a status other than 200 range
-                setError(err.response.data.msg || 'An error occurred during signup.');
-            } else if (err.request) {
+                setError(error.response.data.msg || 'An error occurred during signup.');
+            } else if (error.request) {
                 // Request was made but no response received
                 setError('No response from server. Please try again later.');
             } else {
