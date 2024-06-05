@@ -34,7 +34,7 @@ const Login = () => {
     return (
         <div className="auth-container">
             <form onSubmit={handleSubmit} className="auth-form">
-                <h2>Login</h2>
+                <h2>Se connecter</h2>
                 {error && <p className="error">{error}</p>}
                 <input
                     type="email"
@@ -50,7 +50,7 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                <button type="submit">Login</button>
+                <button type="submit">Connexion</button>
             </form>
         </div>
     );
