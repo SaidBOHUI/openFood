@@ -7,9 +7,11 @@ import {
   Container,
   Row,
   Col,
+  Button,
 } from "react-bootstrap";
 import axios from "axios";
 import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 
 const Details = () => {
   const { id } = useParams();
@@ -67,6 +69,9 @@ const Details = () => {
             <Col md={6}>
               <h5>Ingredients</h5>
               <p>{product?.ingredients_text_fr}</p>
+              <Link to={`/produit/alternate`}>
+                <Button variant="primary">Alternatives</Button>
+              </Link>
             </Col>
             <Col md={6}>
               <h5>Information de nutrition</h5>
