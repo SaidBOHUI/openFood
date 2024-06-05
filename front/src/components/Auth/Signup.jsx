@@ -8,15 +8,28 @@ const Signup = () => {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(''); // Clear previous errors
+
         try {
             await register({ firstName, lastName, email, password });
             navigate('/login');
-        } catch (error) {
-            console.error('Signup error:', error.response.data.msg);
+        } catch (err) {
+            console.error('Signup error:', err);
+            if (err.response) {
+                // Server responded with a status other than 200 range
+                setError(err.response.data.msg || 'An error occurred during signup.');
+            } else if (err.request) {
+                // Request was made but no response received
+                setError('No response from server. Please try again later.');
+            } else {
+                // Something else caused the error
+                setError('An unexpected error occurred.');
+            }
         }
     };
 
@@ -24,6 +37,7 @@ const Signup = () => {
         <div className="auth-container">
             <form onSubmit={handleSubmit} className="auth-form">
                 <h2>Signup</h2>
+                {error && <p className="error">{error}</p>}
                 <input
                     type="text"
                     placeholder="First Name"
