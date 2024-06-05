@@ -47,11 +47,10 @@ const userSchema = new Schema({
         default: 0
     },
     
-    citations: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Citation'
-    }],
-    tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }]
+    // citations: [{
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'Citation'
+    // }],
 },
 {
     timestamps : true
