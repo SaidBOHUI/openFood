@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { register } from '../../services/authService';
-import '../../styles/Auth.css';
+import { login } from '../../../services/authService';
+import '../../../styles/Auth.css';
 
-const Signup = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -14,16 +12,16 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(''); // Clear previous errors
-
         try {
-            await register({ firstName, lastName, email, password });
-            navigate('/login');
-        } catch (err) {
-            console.error('Signup error:', err);
-            if (err.response) {
+            const response = await login({ email, password });
+            localStorage.setItem('token', response.data.accesstoken);
+            navigate('/');
+        } catch (error) {
+            console.error('Login error:', error);
+            if (error.response) {
                 // Server responded with a status other than 200 range
-                setError(err.response.data.msg || 'An error occurred during signup.');
-            } else if (err.request) {
+                setError(error.response.data.msg || 'An error occurred during login.');
+            } else if (error.request) {
                 // Request was made but no response received
                 setError('No response from server. Please try again later.');
             } else {
@@ -36,22 +34,8 @@ const Signup = () => {
     return (
         <div className="auth-container">
             <form onSubmit={handleSubmit} className="auth-form">
-                <h2>Inscription</h2>
+                <h2>Se connecter</h2>
                 {error && <p className="error">{error}</p>}
-                <input
-                    type="text"
-                    placeholder="First Name"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    required
-                />
-                <input
-                    type="text"
-                    placeholder="Last Name"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    required
-                />
                 <input
                     type="email"
                     placeholder="Email"
@@ -66,10 +50,10 @@ const Signup = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                <button type="submit">S'inscrire</button>
+                <button type="submit">Connexion</button>
             </form>
         </div>
     );
 };
 
-export default Signup;
+export default Login;

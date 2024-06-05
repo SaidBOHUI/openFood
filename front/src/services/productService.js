@@ -1,11 +1,9 @@
-import axios from 'axios';
-
-const API_URL = 'http://localhost:8000/product';
+import axios from "axios";
 
 export const getProductByBarcode = (barcode) => {
-    return axios.get(`${API_URL}/barcode/${barcode}`);
+  return axios.get(`/product/barcode/${barcode}`);
 };
 
 export const searchProductsByCategory = (category) => {
-    return axios.get(`${API_URL}/category/${category}`);
+  return axios.get(`/product/category/${category}`);
 };

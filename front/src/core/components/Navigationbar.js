@@ -12,6 +12,7 @@ const Navigationbar = () => {
   //Recuperation de la variable context utilisateur
   const [user, setUser] = useState(useAuth());
   const navigate = useNavigate();
+  console.log(user);
   //Fonction de déconnexion
   const logout = async () => {
     try {
