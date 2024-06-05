@@ -38,6 +38,7 @@ const userCtrl = {
             return res.status(500).json({msg : error})
         } 
     },
+
     getUser : async(req, res) => {
         try {
             console.log("GETUSER");
@@ -81,7 +82,6 @@ const userCtrl = {
                     firstName : user.firstName, 
                     lastName : user.lastName, 
                     role: user.role, 
-                    citations: user.citations
                 }
             })
         } catch (error) {

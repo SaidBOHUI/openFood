@@ -14,7 +14,8 @@ const Login = () => {
         setError(''); // Clear previous errors
         try {
             const response = await login({ email, password });
-            localStorage.setItem('token', response.data.accesstoken);
+            console.log("response: ", response);
+            localStorage.setItem("user", JSON.stringify({...response.data.user,token: response.data.accesstoken}))
             navigate('/');
         } catch (error) {
             console.error('Login error:', error);

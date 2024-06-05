@@ -10,9 +10,9 @@ import Col from "react-bootstrap/Col";
 
 const Navigationbar = () => {
   //Recuperation de la variable context utilisateur
-  const [user, setUser] = useState(useAuth());
+	const { user, setUser } = useAuth();
   const navigate = useNavigate();
-  console.log(user);
+  console.log(user, "USER");
   //Fonction de déconnexion
   const logout = async () => {
     try {
