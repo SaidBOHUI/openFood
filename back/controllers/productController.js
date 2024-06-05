@@ -1,6 +1,7 @@
 const axios = require('axios')
 
 const productCtrl = {
+
 	getProductByBarcode: async (req, res) => {
         try {
             let products = await axios.get(`https://world.openfoodfacts.net/api/v2/product/${req.params.barcode}`)
@@ -44,7 +45,18 @@ const productCtrl = {
                 let products = await axios.get(`https://world.openfoodfacts.org/categories.json?page_size=10000&page=${page}`)
                 console.log("products: ", products.data.tags, products.data.tags.length)
                 if (products.data.tags.length !== 0) {
-                    arrCate.push(...products.data.tags)
+                    let filteredCate = products.data.tags
+                        .filter(product => product.id.startsWith("fr:"))
+                        // .map(product => {
+                        //     return {
+                        //         id: product.id,
+                        //         name: product.name.startsWith("fr:") ? product.name.substring(3) : product.name,
+                        //         known: product.known,
+                        //         products: product.products,
+                        //         url: product.url
+                        //     }
+                        // })
+                    arrCate.push(...filteredCate)
                     page++
                 } else {
                     keepFetching = false
@@ -56,7 +68,7 @@ const productCtrl = {
             res.status(500).json({ msg: error.message })
         }
     },
-
+        
     getAllergens : async(req, res) => {
         let page = 1
         let keepFetching = true
@@ -72,7 +84,7 @@ const productCtrl = {
                     keepFetching = false
                 }
             }
-            res.status(200).json({ categories: arrAllergens })
+            res.status(200).json({ allergens: arrAllergens })
         } catch (error) {
             console.log("error: ", error)
             res.status(500).json({ msg: error.message })
