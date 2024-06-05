@@ -2,16 +2,33 @@ const axios = require('axios')
 
 const productCtrl = {
 
-	getProductByBarcode: async (req, res) => {
+    getProductByBarcode: async (req, res) => {
         try {
-            let products = await axios.get(`https://world.openfoodfacts.net/api/v2/product/${req.params.barcode}`)
-            console.log("products: ", products.data)
-            res.status(200).json(products.data)
+            const { barcode } = req.params;
+            const response = await axios.get(`https://world.openfoodfacts.net/api/v2/product/${barcode}`);
+            if (!response.data.product) {
+                return res.status(404).json({ msg: "Product not found" });
+            }
+            res.status(200).json(response.data.product);
         } catch (error) {
-            console.log("error: ", error);
-            res.status(500).json({msg : error.message})
+            console.error("Error:", error);
+            res.status(500).json({ msg: error.message });
         }
-	},
+    },
+
+    searchProductsByCategory: async (req, res) => {
+        try {
+            const { category } = req.params;
+            const response = await axios.get(`https://world.openfoodfacts.net/api/v2/search?categories_tags=fr:${category}&page_size=100&fields=product_name,brands,nutrition_grades,code`);
+            if (!response.data.products || response.data.products.length === 0) {
+                return res.status(404).json({ msg: "No products found for this category" });
+            }
+            res.status(200).json(response.data.products);
+        } catch (error) {
+            console.error("Error:", error);
+            res.status(500).json({ msg: error.message });
+        }
+    },
 
     getProductTest : async(req, res) => {
         try {
@@ -37,35 +54,39 @@ const productCtrl = {
     },
 
     getCategories: async (req, res) => {
-        let page = 1
-        let keepFetching = true
-        const arrCate = []
+        let page = 1;
+        let keepFetching = true;
+        const arrCate = [];
+        const prefix = req.query.prefix || ''; 
+
         try {
             while (keepFetching) {
-                let products = await axios.get(`https://world.openfoodfacts.org/categories.json?page_size=10000&page=${page}`)
-                console.log("products: ", products.data.tags, products.data.tags.length)
+                let products = await axios.get(`https://world.openfoodfacts.org/categories.json?page_size=10000&page=${page}`);
+                console.log("products: ", products.data.tags, products.data.tags.length);
+                
                 if (products.data.tags.length !== 0) {
                     let filteredCate = products.data.tags
-                        .filter(product => product.id.startsWith("fr:"))
-                        // .map(product => {
-                        //     return {
-                        //         id: product.id,
-                        //         name: product.name.startsWith("fr:") ? product.name.substring(3) : product.name,
-                        //         known: product.known,
-                        //         products: product.products,
-                        //         url: product.url
-                        //     }
-                        // })
-                    arrCate.push(...filteredCate)
-                    page++
+                        .filter(product => product.id.startsWith("fr:") && product.id.substring(3).startsWith(prefix))
+                        .map(product => {
+                            return {
+                                id: product.id,
+                                name: product.name.startsWith("fr:") ? product.name.substring(3) : product.name,
+                                known: product.known,
+                                products: product.products,
+                                url: product.url
+                            };
+                        });
+                    
+                    arrCate.push(...filteredCate);
+                    page++;
                 } else {
-                    keepFetching = false
+                    keepFetching = false;
                 }
             }
-            res.status(200).json({ categories: arrCate })
+            res.status(200).json({ categories: arrCate });
         } catch (error) {
-            console.log("error: ", error)
-            res.status(500).json({ msg: error.message })
+            console.log("error: ", error);
+            res.status(500).json({ msg: error.message });
         }
     },
         
