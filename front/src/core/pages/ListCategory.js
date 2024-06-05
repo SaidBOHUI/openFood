@@ -1,27 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Table } from "react-bootstrap";
+import axios from "axios";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
 const ListCategory = () => {
   //Liste de tous les produits
   const [productList, setProductList] = useState([]);
-  onst[(filter, setFilter)] = useState("");
+  const [filter, setFilter] = useState("");
+  const [listCat, setListCat] = useState(["One", "Two", "Three"]);
 
   //Etat de chargement, pour être sur que l'appel à l'API se fait avant l'affichage du tableau
   const [load, setLoad] = useState(true);
 
-  //Etat de l'état, qu'on mettra à jour dans le SessionStorage
-  const [filter, setFilter] = useState([]);
-
   useEffect(() => {
-    setLoad(true);
-    //Appel à l'API pour avoir la liste des produits
-    axios
-      .get("/product/alternatives")
-      .then((resp) => {
-        setProductList(resp.data);
-        setLoad(false);
-      })
-      .catch((er) => {
-        alert(er.message);
-      });
+    if (filter != "") {
+      if (filter != "One" && filter != "Two" && filter != "Three") {
+        setLoad(true);
+        //Appel à l'API pour avoir la liste des produits
+        axios
+          .get("/product/alternatives")
+          .then((resp) => {
+            setProductList(resp.data);
+            setLoad(false);
+          })
+          .catch((er) => {
+            alert(er.message);
+          });
+      } else {
+        console.log(filter);
+      }
+    }
   }, [filter]);
 
   return (
@@ -29,7 +37,15 @@ const ListCategory = () => {
       <div></div>
       <div>
         {load ? (
-          <h1>Chargement...</h1>
+          <DropdownButton
+            id="dropdown-basic-button"
+            title={filter != "" ? filter : "Categories"}>
+            {listCat.map((item) => (
+              <Dropdown.Item key={item} onClick={() => setFilter(item)}>
+                {item}
+              </Dropdown.Item>
+            ))}
+          </DropdownButton>
         ) : (
           <Table>
             <thead>
