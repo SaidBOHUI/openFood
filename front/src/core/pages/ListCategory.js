@@ -4,6 +4,7 @@ import {
   searchProductsByCategory,
 } from "../../services/productService";
 import "../../styles/ProductSearch.css";
+import { Link } from "react-router-dom";
 
 const ListCategory = () => {
   const [barcode, setBarcode] = useState("");
@@ -77,19 +78,21 @@ const ListCategory = () => {
               <div className="product-grade">Note</div>
             </li>
             {products.map((product) => (
-              <li key={product.code} className="product-item">
-                <div className="product-name">
-                  {product.product_name || "Non spécifié"}
-                </div>
-                <div className="product-brand">
-                  {product.brands || "Non spécifié"}
-                </div>
-                <div className="product-grade">
-                  <span className={`grade grade-${product.nutrition_grades}`}>
-                    {product.nutrition_grades.toUpperCase()}
-                  </span>
-                </div>
-              </li>
+              <Link to={`/produits/${product.code}`}>
+                <li key={product.code} className="product-item">
+                  <div className="product-name">
+                    {product.product_name || "Non spécifié"}
+                  </div>
+                  <div className="product-brand">
+                    {product.brands || "Non spécifié"}
+                  </div>
+                  <div className="product-grade">
+                    <span className={`grade grade-${product.nutrition_grades}`}>
+                      {product.nutrition_grades.toUpperCase()}
+                    </span>
+                  </div>
+                </li>
+              </Link>
             ))}
           </ul>
         </div>
