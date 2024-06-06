@@ -7,6 +7,7 @@ import * as React from "react";
 import Details from "../pages/Details";
 import LoginPage from "../pages/LoginPage";
 import SignupPage from "../pages/SignupPage";
+import BackupPageProduit from "../pages/BackupPageProduit";
 import AlternativesPage from "../pages/AlternativesPage";
 
 
@@ -18,6 +19,7 @@ const MainRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/produit/alternate/:id" element={<AlternativesPage />} />
       <Route path="/produits/:id" element={<Details />} />
+      <Route path="/produits" element={<BackupPageProduit />} />
       {/*<Route path="/produits/:id">
         <Route index caseSensitive element={<ListProduits />} />
         <Route path="theme/:theme" element={<ThemeProduit />} />

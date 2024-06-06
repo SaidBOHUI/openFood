@@ -35,7 +35,7 @@ const Navigationbar = () => {
 
             {user ? (
               <>
-                <Button size="sm" onClick={logout}>
+                <Button size="sm" onClick={logout} sx={{mr:3}}>
                   Deconnexion
                 </Button>
                 <Form inline>
