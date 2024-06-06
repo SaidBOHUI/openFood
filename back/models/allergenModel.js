@@ -5,26 +5,26 @@ const allergenSchema = new Schema(
     id: {
       type: String,
       required: false,
-      trim: true,
     },
 
     know: {
-      type: Int32Array,
+      type: Number,
       required: false,
     },
 
     name: {
       type: String,
-      trim: true,
+      required: false,
     },
 
     products: {
-      type: Int32Array,
+      type: Number,
       required: true,
     },
 
     url: {
       type: String,
+      required: false,
     },
   },
   {
