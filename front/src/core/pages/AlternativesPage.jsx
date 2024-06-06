@@ -38,7 +38,7 @@ const AlternativesPage = () => {
       {error && <Typography className="error-message">{error}</Typography>}
       {originalProduct && (
         <Box className="original-product">
-          <Typography variant="h2">Produit original</Typography>
+          <Typography variant="h2">Produit</Typography>
           <Card sx={{ marginBottom: 4 }}>
             <CardMedia
               component="img"
