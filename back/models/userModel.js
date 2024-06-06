@@ -1,22 +1,18 @@
-const {Schema, model} = require('mongoose');
+const { Schema, model } = require('mongoose');
 const validator = require('validator');
 
-
 const userSchema = new Schema({
-
-    firstName : { 
-        type : String,
+    firstName: { 
+        type: String,
         required: false,
-        trim : true
+        trim: true
     },
-
-    lastName : {
-        type : String,
+    lastName: {
+        type: String,
         required: false
     },
-
-    email : {
-        type : String,
+    email: {
+        type: String,
         trim: true,
         lowercase: true,
         unique: true,
@@ -24,37 +20,37 @@ const userSchema = new Schema({
         validate: {
             validator: (value) => validator.isEmail(value),
             message: "Entrez une adresse email valide s'il vous plait",
-        },       
+        },
     },
-
-    password : {
-        type : String,
+    password: {
+        type: String,
         minlength: 8,
         validate: {
             validator: function(value) {
-                const hasNumber = /\d/.test(value); 
-                const hasLowercase = /[a-z]/.test(value); 
-                const hasUppercase = /[A-Z]/.test(value); 
+                const hasNumber = /\d/.test(value);
+                const hasLowercase = /[a-z]/.test(value);
+                const hasUppercase = /[A-Z]/.test(value);
                 return hasNumber && hasLowercase && hasUppercase;
             },
             message: "Le mot de passe doit contenir au moins un nombre, une lettre minuscule et une lettre majuscule",
         },
         required: true
     },
-
-    role : {
-        type : Number,
+    role: {
+        type: Number,
         default: 0
     },
-    
-    // citations: [{
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Citation'
-    // }],
-},
-{
-    timestamps : true
-})
+    // Add a field to store saved substitutes
+    savedSubstitutes: [{
+        originalProduct: String,
+        alternatives: [{
+            type: String,
+            ref: 'Product'
+        }]
+    }],
+}, {
+    timestamps: true
+});
 
 const Users = model('User', userSchema);
-module.exports = Users
+module.exports = Users;

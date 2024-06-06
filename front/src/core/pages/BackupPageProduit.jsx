@@ -143,7 +143,7 @@ const BackupPageProduit = () => {
                                 </CardContent>
                                 <CardActions>
                                     <Button size="small" href={`/produit/${produit.id}`}>Informations</Button>
-                                    <Button size="small">Alternatives</Button>
+                                    <Button size="small" href={`/produit/alternate/${produit.id}`}>Alternatives</Button> 
                                 </CardActions>
                             </Card>
                         </Grid>

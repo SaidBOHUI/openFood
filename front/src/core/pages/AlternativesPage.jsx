@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getAlternativeProducts, getProductByBarcode } from "../../services/productService";
+import { getAlternativeProducts, getProductByBarcode, saveSubstitutes } from "../../services/productService";
 import { Box, Card, CardContent, CardMedia, Typography, Grid, Button } from "@mui/material";
 import "../../styles/AlternativesPage.css";
- 
+import { useAuth } from "../../core/context/authProvider"; 
+
 const AlternativesPage = () => {
   const { id } = useParams();
   const [originalProduct, setOriginalProduct] = useState(null);
   const [alternatives, setAlternatives] = useState([]);
   const [error, setError] = useState("");
- 
+  const { user } = useAuth(); 
+
   useEffect(() => {
     const fetchOriginalProduct = async () => {
       try {
@@ -19,7 +21,7 @@ const AlternativesPage = () => {
         setError("Produit original non trouvé.");
       }
     };
- 
+
     const fetchAlternatives = async () => {
       try {
         const response = await getAlternativeProducts(id);
@@ -28,11 +30,25 @@ const AlternativesPage = () => {
         setError("Aucun substitut trouvé.");
       }
     };
- 
+
     fetchOriginalProduct();
     fetchAlternatives();
   }, [id]);
- 
+
+  const handleSaveSubstitutes = async () => {
+    try {
+      await saveSubstitutes({
+        userId: user._id, 
+        originalProduct: originalProduct.code,
+        alternatives: alternatives.map(alt => alt.code),
+      });
+      alert("Substituts enregistrés avec succès");
+    } catch (error) {
+      console.error("Erreur lors de l'enregistrement des substituts:", error);
+      alert("Erreur lors de l'enregistrement des substituts");
+    }
+  };
+
   return (
     <Box className="alternative-products-container">
       {error && <Typography className="error-message">{error}</Typography>}
@@ -63,6 +79,9 @@ const AlternativesPage = () => {
       {alternatives.length > 0 && (
         <Box className="alternative-products-list">
           <Typography variant="h2">Alternatives</Typography>
+          <Button variant="contained" color="primary" onClick={handleSaveSubstitutes}>
+            Enregistrer les substituts
+          </Button>
           <Grid container spacing={2} justifyContent="center">
             {alternatives.map((alt) => (
               <Grid item key={alt.code} xs={12} sm={6} md={4} lg={3}>
@@ -99,5 +118,5 @@ const AlternativesPage = () => {
     </Box>
   );
 };
- 
+
 export default AlternativesPage;
