@@ -142,7 +142,7 @@ const BackupPageProduit = () => {
                             <Chip
                                 {...getTagProps({ index })}
                                 label={option.name.includes(':') ? option.name.split(':').pop() : option.name}
-                                style={{ color: 'white', backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
+                                style={{ color: 'white', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
                             />
                         ))
                     }
