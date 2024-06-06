@@ -9,6 +9,6 @@ router.get("/", productCtrl.getProductTest);
 router.get("/categories", productCtrl.getCategories);
 router.get("/allergens", productCtrl.getAllergens);
 router.get("/name/:name", productCtrl.getProductByName);
-router.post("/name/", productCtrl.getNamesOfProducts);
+router.post("/name", productCtrl.getNamesOfProducts);
 
 module.exports = router;

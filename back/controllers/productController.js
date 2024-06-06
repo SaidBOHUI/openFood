@@ -177,6 +177,7 @@ const productCtrl = {
 
 	getNamesOfProducts : async(req, res) => {
 		try {
+			console.log("IN");
 			let {zebla} = req.body
 			let blazes = await axios.get(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${zebla}&search_simple=1&action=process&json=1&page_size=500&fields=product_name`)
 			const uniqueProductNames = [...new Set(blazes.data.products.map(p => p.product_name).filter(name => name !== "" && name.toLowerCase().includes(zebla.toLowerCase())))]
@@ -189,13 +190,13 @@ const productCtrl = {
 		}
 	},
 
-	getFrenchProducts: async (req, res) => {
-		try {
-		} catch (error) {
-			console.log("error: ", error);
-			res.status(500).json({ msg: error.message });
-		}
-	},
+	// getFrenchProducts: async (req, res) => {
+	// 	try {
+	// 	} catch (error) {
+	// 		console.log("error: ", error);
+	// 		res.status(500).json({ msg: error.message });
+	// 	}
+	// },
 };
 
 module.exports = productCtrl;
