@@ -1,73 +1,104 @@
-//Composant barre de navigation
-import { useState } from "react";
-import { Button, Container, Nav, Navbar } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { useAuth } from "../context/authProvider";
-import { useNavigate } from "react-router";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import * as React from 'react'
+import PropTypes from 'prop-types'
+import AppBar from '@mui/material/AppBar'
+import Box from '@mui/material/Box'
+import CssBaseline from '@mui/material/CssBaseline'
+import Divider from '@mui/material/Divider'
+import Drawer from '@mui/material/Drawer'
+import IconButton from '@mui/material/IconButton'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemText from '@mui/material/ListItemText'
+import MenuIcon from '@mui/icons-material/Menu'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
 
-const Navigationbar = () => {
-  //Recuperation de la variable context utilisateur
-  const { user, setUser } = useAuth();
-  const navigate = useNavigate();
-  //Fonction de déconnexion
-  const logout = async () => {
-    try {
-      setUser(null);
-      localStorage.removeItem("user");
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-      return "impossible de vous déconnecter";
-    }
-  };
+const drawerWidth = 240
+const navItems = ['Home', 'About', 'Contact']
+
+const Navbar = (props) => {
+  const { window } = props
+  const [mobileOpen, setMobileOpen] = React.useState(false)
+
+  const handleDrawerToggle = () => {
+    setMobileOpen((prevState) => !prevState)
+  }
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+      <Typography variant="h6" sx={{ my: 2 }}>
+        MUI
+      </Typography>
+      <Divider />
+      <List>
+        {navItems.map((item) => (
+          <ListItem key={item} disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }}>
+              <ListItemText primary={item} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  )
+
+  const container = window !== undefined ? () => window().document.body : undefined
+
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
-      <Container>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Link to={"/"} className="nav-link">
-              Accueil
-            </Link>
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar component="nav" sx={{backgroundColor: '#DF921A'}}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+          >
+            MUI
+          </Typography>
+          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+            {navItems.map((item) => (
+              <Button key={item} sx={{ color: '#fff' }}>
+                {item}
+              </Button>
+            ))}
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <nav>
+        <Drawer
+          container={container}
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </nav>
+    </Box>
+  )
+}
 
-            {user ? (
-              <>
-                <Button size="sm" onClick={logout} sx={{mr:3}}>
-                  Deconnexion
-                </Button>
-                <Form inline>
-                  <Row>
-                    <Col xs="auto">
-                      <Form.Control
-                        type="text"
-                        placeholder="Produit"
-                        className=" mr-sm-2"
-                      />
-                    </Col>
-                    <Col xs="auto">
-                      <Button type="submit">Recherche</Button>
-                    </Col>
-                  </Row>
-                </Form>
-              </>
-            ) : (
-              <>
-                <Link to={"/authentication"} className="nav-link">
-                  Se connecter
-                </Link>
-                <Link to={"/inscription"} className="nav-link">
-                  S'inscrire
-                </Link>
-              </>
-            )}
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-  );
-};
+Navbar.propTypes = {
+  window: PropTypes.func,
+}
 
-export default Navigationbar;
+export default Navbar

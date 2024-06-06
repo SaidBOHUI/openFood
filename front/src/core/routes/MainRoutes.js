@@ -16,10 +16,9 @@ const MainRoutes = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<BackupPageProduit />} />
       <Route path="/produit/alternate/:id" element={<AlternativesPage />} />
       <Route path="/produits/:id" element={<Details />} />
-      <Route path="/produits" element={<BackupPageProduit />} />
       {/*<Route path="/produits/:id">
         <Route index caseSensitive element={<ListProduits />} />
         <Route path="theme/:theme" element={<ThemeProduit />} />
