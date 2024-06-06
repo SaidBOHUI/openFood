@@ -3,13 +3,13 @@ import { useParams, Link } from "react-router-dom";
 import { getAlternativeProducts, getProductByBarcode } from "../../services/productService";
 import { Box, Card, CardContent, CardMedia, Typography, Grid, Button } from "@mui/material";
 import "../../styles/AlternativesPage.css";
-
+ 
 const AlternativesPage = () => {
   const { id } = useParams();
   const [originalProduct, setOriginalProduct] = useState(null);
   const [alternatives, setAlternatives] = useState([]);
   const [error, setError] = useState("");
-
+ 
   useEffect(() => {
     const fetchOriginalProduct = async () => {
       try {
@@ -19,7 +19,7 @@ const AlternativesPage = () => {
         setError("Produit original non trouvé.");
       }
     };
-
+ 
     const fetchAlternatives = async () => {
       try {
         const response = await getAlternativeProducts(id);
@@ -28,11 +28,11 @@ const AlternativesPage = () => {
         setError("Aucun substitut trouvé.");
       }
     };
-
+ 
     fetchOriginalProduct();
     fetchAlternatives();
   }, [id]);
-
+ 
   return (
     <Box className="alternative-products-container">
       {error && <Typography className="error-message">{error}</Typography>}
@@ -44,7 +44,7 @@ const AlternativesPage = () => {
               component="img"
               alt={originalProduct.product_name || "Non spécifié"}
               height="140"
-              image={originalProduct.image_url || "default_image_url.jpg"} 
+              image={originalProduct.image_url || "default_image_url.jpg"}
             />
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
@@ -99,5 +99,5 @@ const AlternativesPage = () => {
     </Box>
   );
 };
-
+ 
 export default AlternativesPage;
