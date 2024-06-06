@@ -8,8 +8,9 @@ export const searchProductsByCategory = (category) => {
   return axios.get(`/product/category/${category}`);
 };
 
-export const getAlternativeProducts = (barcode) => {
-  return axios.get(`/product/alternatives/${barcode}`);
+export const getAlternativeProducts = (categories) => {
+  console.log("categories: ", categories);
+  return axios.get(`/product/alternatives`, {categories: categories});
 };
 
 export const saveSubstitute = (data) => {

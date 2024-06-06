@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { getAlternativeProducts } from "../../services/productService";
 import "../../styles/ProductDetails.css";
 
@@ -7,11 +7,16 @@ const AlternativesPage = () => {
   const { id } = useParams();
   const [alternatives, setAlternatives] = useState([]);
   const [error, setError] = useState("");
+  const location = useLocation()
+  const { produit } = location.state || {}
+
+
 
   useEffect(() => {
-    const fetchAlternatives = async () => {
+    const fetchAlternatives = async (product) => {
       try {
-        const response = await getAlternativeProducts(id);
+        const response = await getAlternativeProducts(product.categories);
+        console.log("response.data: ", response.data);
         setAlternatives(response.data);
       } catch (error) {
         setError("Aucun substitut trouvé.");

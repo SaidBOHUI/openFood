@@ -3,12 +3,15 @@ import React, { useEffect, useState } from "react"
 import banner from "../../assets/fruitBasket.webp"
 import axios from "axios"
 import SearchIcon from '@mui/icons-material/Search'
+import { useNavigate } from 'react-router-dom'
+
 
 const BackupPageProduit = () => {
     const [calledProducts, setCalledProducts] = useState([])
     const [listNames, setListNames] = useState([])
     const [nameToSearch, setNameToSearch] = useState("")
     const [showProducts, setShowProducts] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (nameToSearch.length > 2) {
@@ -36,6 +39,10 @@ const BackupPageProduit = () => {
             console.log("error: ", error);
             return error.message
         }
+    }
+
+    const handleAlternativeClick = (produit) => {
+        navigate(`/produit/alternate/${produit.id}`, { state: { produit } })
     }
 
     const handleSearchClick = () => {
@@ -142,7 +149,7 @@ const BackupPageProduit = () => {
                                 </CardContent>
                                 <CardActions>
                                     <Button size="small">Informations</Button>
-                                    <Button size="small">Alternatives</Button>
+                                    <Button size="small" onClick={() => handleAlternativeClick(produit)}>Alternatives</Button>                                    
                                 </CardActions>
                             </Card>
                         </Grid>

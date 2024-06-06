@@ -14,6 +14,8 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
+import { useAuth } from '../context/authProvider'
+import logo from '../../assets/logo.svg'
 
 const drawerWidth = 240
 const navItems = ['Home', 'About', 'Contact']
@@ -21,6 +23,7 @@ const navItems = ['Home', 'About', 'Contact']
 const Navbar = (props) => {
   const { window } = props
   const [mobileOpen, setMobileOpen] = React.useState(false)
+  const { user, setUser } = useAuth()
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState)
@@ -49,7 +52,7 @@ const Navbar = (props) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar component="nav" sx={{backgroundColor: '#DF921A'}}>
+      <AppBar component="nav" sx={{ backgroundColor: '#DF921A' }}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -60,19 +63,12 @@ const Navbar = (props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          >
-            MUI
-          </Typography>
+          <Box sx={{ flexGrow: 1 }}>
+            <img src={logo} alt="logo" style={{ height: '40px', marginRight: '16px' }} />
+          </Box>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
-                {item}
-              </Button>
-            ))}
+            <Button sx={{ color: '#fff' }}>Produits</Button>
+            <Button sx={{ color: '#fff' }}>{user ? 'Déconnexion' : 'Connexion'}</Button>
           </Box>
         </Toolbar>
       </AppBar>
