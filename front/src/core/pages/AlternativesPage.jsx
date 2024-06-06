@@ -86,7 +86,7 @@ const AlternativesPage = () => {
                   </CardContent>
                   <Box sx={{ flexGrow: 1 }} />
                   <Box sx={{ display: 'flex', justifyContent: 'center', pb: 2 }}>
-                    <Link to={`/produits/${alt.code}`} style={{ textDecoration: 'none' }}>
+                    <Link to={`/produit/${alt.code}`} style={{ textDecoration: 'none' }}>
                       <Button variant="contained" color="primary">Voir les détails</Button>
                     </Link>
                   </Box>

@@ -167,14 +167,34 @@ const productCtrl = {
 
   getProductByName: async (req, res) => {
     try {
+      const { name } = req.params;
+      const allergens = req.query.allergens
+        ? req.query.allergens.split(",")
+        : [];
+
       const response = await axios.get(
-        `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${req.params.name}&search_simple=1&action=process&json=1&page_size=50&page=1`
+        `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${name}&search_simple=1&action=process&json=1&page_size=50&page=1`
       );
 
       let products = response.data.products;
-      console.log("products[0]: ", products[0]);
+
+      if (allergens.length > 0) {
+        products = products.filter((product) => {
+          return !allergens.some(
+            (allergen) =>
+              product.allergens_tags &&
+              product.allergens_tags.includes(allergen)
+          );
+        });
+      }
+
+      if (products.length === 0) {
+        return res
+          .status(404)
+          .json({ msg: "No products found matching the criteria" });
+      }
+
       let cleanedProducts = products.map((product) => {
-        console.log("product.stores_tags", typeof product.stores_tags);
         return {
           id: product._id || "N/A",
           name: product.product_name_fr || "N/A",
@@ -195,7 +215,6 @@ const productCtrl = {
           imageUrl: product.image_url || "N/A",
         };
       });
-      // console.log("cleanedProducts: ", cleanedProducts);
 
       res.status(200).json(cleanedProducts);
     } catch (error) {

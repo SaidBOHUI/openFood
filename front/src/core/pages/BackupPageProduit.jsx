@@ -1,20 +1,37 @@
-import { Autocomplete, Box, Button, Card, CardActions, CardContent, CardMedia, Grid, IconButton, TextField, Typography } from "@mui/material"
-import React, { useEffect, useState } from "react"
-import banner from "../../assets/fruitBasket.webp"
-import axios from "axios"
-import SearchIcon from '@mui/icons-material/Search'
+import { Autocomplete, Box, Button, Card, CardActions, CardContent, CardMedia, Chip, Grid, IconButton, TextField, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import banner from "../../assets/fruitBasket.webp";
+import axios from "axios";
+import SearchIcon from '@mui/icons-material/Search';
 
 const BackupPageProduit = () => {
     const [calledProducts, setCalledProducts] = useState([]);
     const [listNames, setListNames] = useState([]);
     const [nameToSearch, setNameToSearch] = useState("");
     const [showProducts, setShowProducts] = useState(false);
+    const [allergens, setAllergens] = useState([]);
+    const [selectedAllergens, setSelectedAllergens] = useState([]);
+
+    useEffect(() => {
+        if (allergens.length < 1) {
+            getAllergen();
+        }
+    }, []);
 
     useEffect(() => {
         if (nameToSearch.length > 2) {
             getNames();
         }
     }, [nameToSearch]);
+
+    const getAllergen = async () => {
+        try {
+            let response = await axios.get(`/allergen/`);
+            setAllergens(response.data);
+        } catch (error) {
+            console.log("error: ", error);
+        }
+    };
 
     const getNames = async () => {
         try {
@@ -29,7 +46,8 @@ const BackupPageProduit = () => {
     const get50Products = async () => {
         try {
             console.log("get50Products called");
-            let response = await axios.get(`http://localhost:8000/product/name/${nameToSearch}`);
+            const allergenString = selectedAllergens.join(',');
+            let response = await axios.get(`http://localhost:8000/product/name/${nameToSearch}?allergens=${allergenString}`);
             console.log("products: ", response.data);
             setCalledProducts(response.data);
         } catch (error) {
@@ -37,7 +55,6 @@ const BackupPageProduit = () => {
             return error.message;
         }
     };
-
 
     const handleSearchClick = () => {
         get50Products();
@@ -107,6 +124,49 @@ const BackupPageProduit = () => {
             </Box>
             <Box
                 sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    color: "white",
+                    width: "35%",
+                    marginBottom: 5,
+                }}
+            >
+                <Autocomplete
+                    multiple
+                    style={{width: "1000px"}}
+                    options={allergens}
+                    getOptionLabel={(option) => option.name.includes(':') ? option.name.split(':').pop() : option.name}
+                    onChange={(event, value) => setSelectedAllergens(value.map(a => a.id))}
+                    renderTags={(value, getTagProps) =>
+                        value.map((option, index) => (
+                            <Chip
+                                {...getTagProps({ index })}
+                                label={option.name.includes(':') ? option.name.split(':').pop() : option.name}
+                                style={{ color: 'white', backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
+                            />
+                        ))
+                    }
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            variant="filled"
+                            label="Sélectionner des allergènes"
+                            placeholder="Allergènes"
+                            InputLabelProps={{ style: { color: "white" } }}
+                            InputProps={{
+                                ...params.InputProps,
+                                style: {
+                                    color: "white",
+                                    backgroundColor: "rgba(255, 255, 255, 0.3)",
+                                    borderRadius: "4px",
+                                },
+                            }}
+                        />
+                    )}
+                />
+            </Box>
+            <Box
+                sx={{
                     display: showProducts ? "flex" : "none",
                     flexWrap: "wrap",
                     justifyContent: "center",
@@ -143,7 +203,7 @@ const BackupPageProduit = () => {
                                 </CardContent>
                                 <CardActions>
                                     <Button size="small" href={`/produit/${produit.id}`}>Informations</Button>
-                                    <Button size="small">Alternatives</Button>
+                                    <Button size="small" href={`/produit/alternate/${produit.id}`}>Alternatives</Button>
                                 </CardActions>
                             </Card>
                         </Grid>
@@ -152,6 +212,6 @@ const BackupPageProduit = () => {
             </Box>
         </Box>
     );
-}
+};
 
 export default BackupPageProduit;
