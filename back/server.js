@@ -18,6 +18,7 @@ app.use(cors(corsOptions));
 //Routes
 app.use("/user", require("./routes/userRouter"));
 app.use("/product", require("./routes/productRouter"));
+app.use("/allergen", require("./routes/allergenRouter"));
 
 const URI = process.env.URI;
 
