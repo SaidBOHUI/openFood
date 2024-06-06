@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import banner from "../../assets/fruitBasket.webp"
 import axios from "axios"
 import SearchIcon from '@mui/icons-material/Search'
+import { Link } from "react-router-dom"
 
 const BackupPageProduit = () => {
     const [calledProducts, setCalledProducts] = useState([])
@@ -141,7 +142,9 @@ const BackupPageProduit = () => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
+                                    <Link to={`/produits/${produit.id}`}>
                                     <Button size="small">Informations</Button>
+                                    </Link>
                                     <Button size="small">Alternatives</Button>
                                 </CardActions>
                             </Card>

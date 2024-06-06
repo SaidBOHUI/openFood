@@ -30,7 +30,7 @@ const Details = () => {
 
   return (
     <Container>
-      <Card style={{ width: "100%", marginTop: "20px" }}>
+      <Card style={{ width: "100%", marginTop: "70px" }}>
         <Card.Header as="h3">{product?.product_name}</Card.Header>
         <Card.Body>
           <Row>
