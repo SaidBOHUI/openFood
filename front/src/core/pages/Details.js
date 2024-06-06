@@ -11,10 +11,12 @@ import {
 } from "react-bootstrap";
 import axios from "axios";
 import { useParams, Link } from "react-router-dom";
+import { useAuth } from "../context/authProvider";
 
 const Details = () => {
   const { id } = useParams();
   const [product, setProduct] = useState({});
+  const { user, setUser } = useAuth();
 
   useEffect(() => {
     axios
@@ -68,9 +70,13 @@ const Details = () => {
             <Col md={6}>
               <h5>Ingredients</h5>
               <p>{product?.ingredients_text_fr}</p>
-              <Link to={`/produit/alternate/${id}`}>
-                <Button variant="primary">Alternatives</Button>
-              </Link>
+              {user ? (
+                <Link to={`/produit/alternate/${id}`}>
+                  <Button variant="primary">Alternatives</Button>
+                </Link>
+              ) : (
+                <></>
+              )}
             </Col>
             <Col md={6}>
               <h5>Information de nutrition</h5>

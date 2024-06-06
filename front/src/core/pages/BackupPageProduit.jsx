@@ -11,6 +11,7 @@ const BackupPageProduit = () => {
     const [showProducts, setShowProducts] = useState(false);
     const [allergens, setAllergens] = useState([]);
     const [selectedAllergens, setSelectedAllergens] = useState([]);
+    const { user, setUser } = useAuth();
 
     useEffect(() => {
         if (allergens.length < 1) {
@@ -203,7 +204,9 @@ const BackupPageProduit = () => {
                                 </CardContent>
                                 <CardActions>
                                     <Button size="small" href={`/produit/${produit.id}`}>Informations</Button>
+                                    {user?
                                     <Button size="small" href={`/produit/alternate/${produit.id}`}>Alternatives</Button>
+                                    :<></>}
                                 </CardActions>
                             </Card>
                         </Grid>
