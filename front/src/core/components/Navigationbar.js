@@ -14,6 +14,9 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
+import { useAuth } from '../context/authProvider'
+import logo from '../../assets/logo.svg'
+import { useNavigate } from 'react-router-dom' // Utiliser useNavigate à la place de Navigate
 
 const drawerWidth = 240
 const navItems = ['Home', 'About', 'Contact']
@@ -21,6 +24,8 @@ const navItems = ['Home', 'About', 'Contact']
 const Navbar = (props) => {
   const { window } = props
   const [mobileOpen, setMobileOpen] = React.useState(false)
+  const { user, setUser } = useAuth()
+  const navigate = useNavigate() // Utiliser useNavigate ici
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState)
@@ -44,12 +49,23 @@ const Navbar = (props) => {
     </Box>
   )
 
+  const logout = async () => {
+    try {
+      setUser(null)
+      localStorage.removeItem('user')
+      navigate('/') 
+    } catch (error) {
+      console.log(error)
+      return 'impossible de vous déconnecter'
+    }
+  }
+
   const container = window !== undefined ? () => window().document.body : undefined
 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar component="nav" sx={{backgroundColor: '#DF921A'}}>
+      <AppBar component="nav" sx={{ backgroundColor: '#DF921A' }}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -60,19 +76,13 @@ const Navbar = (props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          >
-            MUI
-          </Typography>
+          <Box sx={{ flexGrow: 1 }}>
+            <img src={logo} alt="logo" style={{ height: '40px', marginRight: '16px' }} />
+          </Box>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
-                {item}
-              </Button>
-            ))}
+            <Button sx={{ color: '#fff' }}>Produits</Button>
+            {user ? <Button sx={{ color: '#fff' }} onClick={logout}>Déconnexion</Button> :
+            <Button sx={{ color: '#fff' }} onClick={() => navigate('/authentication')}>Connexion</Button>}
           </Box>
         </Toolbar>
       </AppBar>
