@@ -16,6 +16,7 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import { useAuth } from '../context/authProvider'
 import logo from '../../assets/logo.svg'
+import { useNavigate } from 'react-router-dom' // Utiliser useNavigate à la place de Navigate
 
 const drawerWidth = 240
 const navItems = ['Home', 'About', 'Contact']
@@ -24,6 +25,7 @@ const Navbar = (props) => {
   const { window } = props
   const [mobileOpen, setMobileOpen] = React.useState(false)
   const { user, setUser } = useAuth()
+  const navigate = useNavigate() // Utiliser useNavigate ici
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState)
@@ -47,6 +49,17 @@ const Navbar = (props) => {
     </Box>
   )
 
+  const logout = async () => {
+    try {
+      setUser(null)
+      localStorage.removeItem('user')
+      navigate('/') 
+    } catch (error) {
+      console.log(error)
+      return 'impossible de vous déconnecter'
+    }
+  }
+
   const container = window !== undefined ? () => window().document.body : undefined
 
   return (
@@ -68,7 +81,8 @@ const Navbar = (props) => {
           </Box>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             <Button sx={{ color: '#fff' }}>Produits</Button>
-            <Button sx={{ color: '#fff' }}>{user ? 'Déconnexion' : 'Connexion'}</Button>
+            {user ? <Button sx={{ color: '#fff' }} onClick={logout}>Déconnexion</Button> :
+            <Button sx={{ color: '#fff' }} onClick={() => navigate('/authentication')}>Connexion</Button>}
           </Box>
         </Toolbar>
       </AppBar>
