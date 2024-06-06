@@ -1,6 +1,5 @@
 //Routeur
 import { Navigate, Route, Routes } from "react-router";
-import Home from "../pages/Home";
 import { useState } from "react";
 import { useAuth } from "../context/authProvider";
 import * as React from "react";
@@ -9,7 +8,6 @@ import LoginPage from "../pages/LoginPage";
 import SignupPage from "../pages/SignupPage";
 import BackupPageProduit from "../pages/BackupPageProduit";
 import AlternativesPage from "../pages/AlternativesPage";
-
 
 const MainRoutes = () => {
   const [user, setUser] = useState(useAuth());
