@@ -1,47 +1,48 @@
-import { Autocomplete, Box, Button, Card, CardActions, CardContent, CardMedia, Grid, IconButton, TextField, Typography } from "@mui/material"
-import React, { useEffect, useState } from "react"
-import banner from "../../assets/fruitBasket.webp"
-import axios from "axios"
-import SearchIcon from '@mui/icons-material/Search'
+import { Autocomplete, Box, Button, Card, CardActions, CardContent, CardMedia, Grid, IconButton, TextField, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import banner from "../../assets/fruitBasket.webp";
+import axios from "axios";
+import SearchIcon from '@mui/icons-material/Search';
+import { Link } from "react-router-dom";
 
 const BackupPageProduit = () => {
-    const [calledProducts, setCalledProducts] = useState([])
-    const [listNames, setListNames] = useState([])
-    const [nameToSearch, setNameToSearch] = useState("")
-    const [showProducts, setShowProducts] = useState(false)
+    const [calledProducts, setCalledProducts] = useState([]);
+    const [listNames, setListNames] = useState([]);
+    const [nameToSearch, setNameToSearch] = useState("");
+    const [showProducts, setShowProducts] = useState(false);
 
     useEffect(() => {
         if (nameToSearch.length > 2) {
-            getNames()
+            getNames();
         }
-    }, [nameToSearch])
+    }, [nameToSearch]);
 
-    const getNames = async() => {
+    const getNames = async () => {
         try {
-            let response = await axios.post(`http://localhost:8000/product/name`, { zebla: nameToSearch })
+            let response = await axios.post(`http://localhost:8000/product/name`, { zebla: nameToSearch });
             console.log("response.data: ", response.data);
-            setListNames(response.data)
+            setListNames(response.data);
         } catch (error) {
-            console.log("error: ", error)
+            console.log("error: ", error);
         }
-    }
+    };
 
     const get50Products = async () => {
         try {
-            console.log("get50Products called")
-            let response = await axios.get(`http://localhost:8000/product/name/${nameToSearch}`)
-            console.log("products: ", response.data)
-            setCalledProducts(response.data)
+            console.log("get50Products called");
+            let response = await axios.get(`http://localhost:8000/product/name/${nameToSearch}`);
+            console.log("products: ", response.data);
+            setCalledProducts(response.data);
         } catch (error) {
             console.log("error: ", error);
-            return error.message
+            return error.message;
         }
-    }
+    };
 
     const handleSearchClick = () => {
-        get50Products()
-        setShowProducts(true)
-    }
+        get50Products();
+        setShowProducts(true);
+    };
 
     return (
         <Box
@@ -142,7 +143,9 @@ const BackupPageProduit = () => {
                                 </CardContent>
                                 <CardActions>
                                     <Button size="small">Informations</Button>
-                                    <Button size="small">Alternatives</Button>
+                                    <Link to={`/produit/alternate/${produit.id}`}>
+                                        <Button size="small">Alternatives</Button>
+                                    </Link>
                                 </CardActions>
                             </Card>
                         </Grid>
@@ -150,7 +153,7 @@ const BackupPageProduit = () => {
                 </Grid>
             </Box>
         </Box>
-    )
+    );
 }
 
-export default BackupPageProduit
+export default BackupPageProduit;

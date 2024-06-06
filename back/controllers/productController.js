@@ -49,19 +49,38 @@ const productCtrl = {
 		}
 	},
 
-	getAlternativeProducts: async (req, res) => {
-		try {
-			let { categories } = req.body;
-			// let categories = "Beverages,Waters,Spring waters"
-			let products = await axios.get(
-				`https://world.openfoodfacts.net/api/v2/search?categories_tags=${categories}&page_size=100&page=1`
-			);
-			res.status(200).json(products.data);
-		} catch (e) {
-			console.log("e: ", e);
-			res.status(500).json({ msg: e.message });
-		}
-	},
+    getAlternativeProducts: async (req, res) => {
+        try {
+            const { barcode } = req.params;
+            // Fetch the original product to get its categories
+            const originalProductResponse = await axios.get(
+                `https://world.openfoodfacts.net/api/v2/product/${barcode}`
+            );
+            const originalProduct = originalProductResponse.data.product;
+            if (!originalProduct) {
+                return res.status(404).json({ msg: "Product not found" });
+            }
+            const categories = originalProduct.categories_tags;
+
+            // Fetch products in the same category
+            const response = await axios.get(
+                `https://world.openfoodfacts.net/api/v2/search?categories_tags=${categories.join(',')}&page_size=100`
+            );
+            const products = response.data.products;
+
+            // Filter and sort the products by grade
+            const filteredProducts = products
+                .filter(product => product.nutrition_grades && product.nutrition_grades !== 'unknown' && product.nutrition_grades !== 'e') // Filter out unknown and worst grades
+                .sort((a, b) => a.nutrition_grades.localeCompare(b.nutrition_grades)) // Sort by grade
+                .slice(0, 5); // Get top 5 alternatives
+
+            res.status(200).json(filteredProducts);
+        } catch (error) {
+            console.error("Error:", error);
+            res.status(500).json({ msg: error.message });
+        }
+    },
+
 
 	getCategories: async (req, res) => {
 		let page = 1;
