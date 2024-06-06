@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import banner from "../../assets/fruitBasket.webp";
 import axios from "axios";
 import SearchIcon from '@mui/icons-material/Search';
+import { useAuth } from "../context/authProvider";
 
 const BackupPageProduit = () => {
     const [calledProducts, setCalledProducts] = useState([]);
@@ -16,6 +17,7 @@ const BackupPageProduit = () => {
     useEffect(() => {
         if (allergens.length < 1) {
             getAllergen();
+            
         }
     }, []);
 
