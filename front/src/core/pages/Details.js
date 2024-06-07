@@ -33,7 +33,7 @@ const Details = () => {
   return (
     <Container>
       <Card style={{ width: "100%", marginTop: "70px" }}>
-        <Card.Header as="h3">{product?.product_name}</Card.Header>
+        <Card.Header as="h3">{product?.product_name_fr}</Card.Header>
         <Card.Body>
           <Row>
             <Col md={4}>
@@ -41,6 +41,9 @@ const Details = () => {
             </Col>
             <Col md={8}>
               <ListGroup variant="flush">
+                <ListGroup.Item>
+                  <strong>Code barre:</strong> {product?.code}
+                </ListGroup.Item>
                 <ListGroup.Item>
                   <strong>Mark:</strong> {product?.brands}
                 </ListGroup.Item>

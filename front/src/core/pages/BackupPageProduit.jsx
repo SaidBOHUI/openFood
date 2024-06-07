@@ -4,9 +4,13 @@ import banner from "../../assets/fruitBasket.webp";
 import axios from "axios";
 import SearchIcon from '@mui/icons-material/Search';
 import { useAuth } from "../context/authProvider";
+import {
+    getProductByBarcode,
+  } from "../../services/productService";
 
 const BackupPageProduit = () => {
     const [calledProducts, setCalledProducts] = useState([]);
+    const [barcode, setBarcode] = useState("");
     const [listNames, setListNames] = useState([]);
     const [nameToSearch, setNameToSearch] = useState("");
     const [showProducts, setShowProducts] = useState(false);
@@ -58,6 +62,20 @@ const BackupPageProduit = () => {
             return error.message;
         }
     };
+
+    const handleBarcodeSearch = async (e) => {
+        e.preventDefault();
+        
+        try {
+          const response = await getProductByBarcode(barcode);
+          console.log(response)
+          setCalledProducts([response.data]);
+          setShowProducts(true);
+        } catch (error) {
+            console.log("error: ", error);
+            return error.message;
+        }
+      };
 
     const handleSearchClick = () => {
         get50Products();
@@ -132,6 +150,42 @@ const BackupPageProduit = () => {
                     color: "white",
                     width: "35%",
                     marginBottom: 5,
+                    
+                }}
+            >
+                <TextField
+                 sx={{ width: "100%" }}
+                label="Recherche de produit (code barre)"
+                variant="filled"
+                style= {{
+                    color: "white",
+                    backgroundColor: "rgba(255, 255, 255, 0.2)",
+                    borderRadius: "4px",
+                }}
+                placeholder="Entrer le code-barres"
+                InputLabelProps={{ style: { color: "white" } }}
+            InputProps={{
+                style: {
+                    color: "white",
+                },
+            }}
+                onChange={(e) => setBarcode(e.target.value)}
+                />
+                <IconButton
+                    aria-label="search"
+                    onClick={handleBarcodeSearch}
+                    sx={{ ml: 1 }}
+                >
+                <SearchIcon sx={{ color: "white" }} />
+                </IconButton>
+            </Box>
+            <Box
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    color: "white",
+                    width: "35%",
+                    marginBottom: 5,
                 }}
             >
                 <Autocomplete
@@ -186,22 +240,22 @@ const BackupPageProduit = () => {
                             <Card sx={{ height: '100%' }}>
                                 <CardMedia
                                     component="img"
-                                    alt={produit.name}
+                                    alt={produit?.name}
                                     height="140"
-                                    image={produit.imageUrl}
+                                    image={produit?.imageUrl ? produit?.imageUrl:produit?.image_url}
                                 />
                                 <CardContent sx={{ flexGrow: 1 }}>
                                     <Typography gutterBottom variant="h5" component="div">
-                                        {produit.name}
+                                        {produit?.name}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
-                                        Marque(s): {produit.brands}
+                                        Marque(s): {produit?.brands}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
-                                        Nutri-Score: {produit.nutriscore.toUpperCase()}
+                                        Nutri-Score: {typeof produit.nutriscore != "object" ?produit?.nutriscore.toUpperCase() : produit?.nutriscore_data.grade}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
-                                        Magasin: {produit.stores}
+                                        Magasin: {produit?.stores}
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
