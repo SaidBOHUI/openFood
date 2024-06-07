@@ -240,13 +240,13 @@ const BackupPageProduit = () => {
                             <Card sx={{ height: '100%' }}>
                                 <CardMedia
                                     component="img"
-                                    alt={produit?.name}
+                                    alt={produit?.name ? produit?.name:produit?.generic_name}
                                     height="140"
                                     image={produit?.imageUrl ? produit?.imageUrl:produit?.image_url}
                                 />
                                 <CardContent sx={{ flexGrow: 1 }}>
                                     <Typography gutterBottom variant="h5" component="div">
-                                        {produit?.name}
+                                        {produit?.name ? produit?.name:produit?.generic_name}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
                                         Marque(s): {produit?.brands}
