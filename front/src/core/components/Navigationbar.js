@@ -92,11 +92,18 @@ const Navbar = (props) => {
                 Déconnexion
               </Button>
             ) : (
-              <Button
-                sx={{ color: "#fff" }}
-                onClick={() => navigate("/authentication")}>
-                Connexion
-              </Button>
+              <>
+                <Button
+                  sx={{ color: "#fff" }}
+                  onClick={() => navigate("/authentication")}>
+                  Connexion
+                </Button>
+                <Button
+                  sx={{ color: "#fff" }}
+                  onClick={() => navigate("/inscription")}>
+                  Inscription
+                </Button>
+              </>
             )}
           </Box>
         </Toolbar>
